@@ -29,7 +29,7 @@ git clone https://github.com/kwagstyl/laminar_python
 
 git clone https://github.com/kwagstyl/convolutional_meshes
 
-add path:
+add paths:
 
 export PYTHONPATH=$PYTHONPATH:/path/to/convolutional_meshes
 
