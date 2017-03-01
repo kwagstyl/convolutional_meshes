@@ -20,8 +20,9 @@ If you have trouble, open up utils.py
 For us, sp.diags(r_inv) needed to be changed to sp.diags(r_inv, offsets=0)
 (2 instances of sp.diags to change in total)
 
-#laminar python
-currently a bit big, we're only using io_mesh.py so feel free to just download that module.
+laminar python
+
+It's got some awesome functions so please do download the whole package. but we're only using io_mesh.py so you could just download that module.
 
 git clone https://github.com/kwagstyl/laminar_python
 
