@@ -9,4 +9,4 @@ mesh = io.load_mesh_geometry('Structure/average/S900.L.pial_MSMAll.32k_fs_LR.sur
 mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)
 
 #restrict mesh using the mask
-masked_mesh = mesh['faces'][mask]
+
