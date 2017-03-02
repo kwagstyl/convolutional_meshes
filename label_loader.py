@@ -15,3 +15,4 @@ for subject in IDs:
   fulldata=np.loadtxt('convolutional_meshes_data/Labels/BA45_' + subject + '.1D')
   label_matrix[s,:] = fulldata[mask]
 
+np.savetxt('Label_data_in_mask.txt', dtype=int)
