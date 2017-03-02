@@ -22,6 +22,12 @@ def mask_faces(faces):
             masked_faces.append(f)
     return masked_faces
 
+def reindexing(masked_faces):
+    all_masked_vertices = np.unique( np.array(masked_faces).flatten() )
+    reindex = dict([ (all_masked_vertices[i], i) for i in range(len(all_masked_vertices)) ])
+    return reindex
+
+
 def reindex_faces(masked_faces):
     all_masked_vertices = np.unique( np.array(masked_faces).flatten() )
     reindex = dict([ (all_masked_vertices[i], i) for i in range(len(all_masked_vertices)) ])
@@ -35,13 +41,14 @@ faces = mesh['faces']
 
 #load in mask of vertices being considered (BA44 and 45)
 mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)
+mask = mask - 1
 
 #Mask the faces
 masked_faces=mask_faces(faces)
 
 #Create indices for masked vertices
-masked_faces_ridx = reindex_faces(masked_faces)
-
+reindex = reindexing(masked_faces)
+masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
 #restrict mesh using the mask
 adj = mesh_to_graph(masked_faces_ridx)
 
