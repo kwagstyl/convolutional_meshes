@@ -29,3 +29,4 @@ for subject in IDs:
 
 
        
+np.save('feature_matrix.npy', feature_matrix)
