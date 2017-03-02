@@ -2,7 +2,8 @@ import io_mesh as io
 import numpy as np
 ##loading data
 #load limiting mask i.e. vertices to include
-mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)
+#-1 for matlab python indexing
+mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)-1
 
 
 #load subject ids
