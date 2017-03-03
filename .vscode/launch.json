@@ -6,7 +6,7 @@
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
-            "program": "${workspaceRoot}/train_neuro.py",
+            "program": "${workspaceRoot}/train_neuro_small.py",
             "pythonPath": "${config.python.pythonPath}",
             "exceptionHandling": {
                 "ignore": ["ImportError"]
