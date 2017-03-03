@@ -1,6 +1,7 @@
 import io_mesh as io
 import numpy as np
 import scipy.misc
+from scipy.sparse import csr_matrix
 
 def mesh_to_graph(faces):
     n=faces.max()+1
@@ -52,8 +53,12 @@ masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_fa
 #restrict mesh using the mask
 adj = mesh_to_graph(masked_faces_ridx)
 
+#convert to sparse matrix
+sparse_adj = csr_matrix(adj)
+
 scipy.misc.imsave('adjacency_matrix.png', adj, format='png')
-np.save('adjacency_matrix', adj)
+
+np.save('sparse_adjacency_matrix', sparse_adj)
 
 
 
