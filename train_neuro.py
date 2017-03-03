@@ -31,16 +31,17 @@ flags.DEFINE_integer('max_degree', 3, 'Maximum Chebyshev polynomial degree.')
 # Load data,
 #adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data(FLAGS.dataset)
 #our loading, reorganise into diagonal
-nSubjects=10
 train = 4
 val = 5
 test = 1
+nSubjects=train + val + test
 
-adj_fn='./data/all/'+str(nSubjects)+'_subjects_adjacency.mtx'
+
+adj_fn='./data/'+str(nSubjects)+'_subjects_adjacency.mtx'
 if os.path.exists(adj_fn):
     adj = io.mmread(adj_fn)
 else:
-    adj = blocked_adjacency(nSubjects)
+    adj = blocked_adjacency(nSubjects, aggr_adj_fn=adj_fn)
 
 #
 label = np.loadtxt('./data/Label_data_in_mask.txt', dtype=int).flatten()

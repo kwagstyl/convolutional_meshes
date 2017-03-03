@@ -1,17 +1,18 @@
 import numpy as np
+from surface_to_graph import surface_to_graph
 from scipy import sparse
 from scipy import io
 import os
 import sys
 
 def blocked_adjacency(nSubjects=10, mesh_fn='data/Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii',  label1_fn='data/vlpfc_nodes.1D', aggr_adj_fn='data/all_subjects_adjacency.mtx' ):
-    adj_fn='data/adjacency_matrix.npy'
+    adj_fn='data/adjacency_matrix'
     
     label = np.loadtxt(label1_fn)
     length = len(label)
 
     
-    if os.path.exists(adj_fn):
+    if os.path.exists(adj_fn) and False:
         print 'Loading standard adjacency matrix'
         adj = np.load(adj_fn).astype(bool)
     else:

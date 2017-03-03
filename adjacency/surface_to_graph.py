@@ -36,7 +36,7 @@ def reindex_faces(masked_faces):
     return masked_faces_ridx
 
 
-def main(mesh_fn, mask_fn, adj_fn):
+def surface_to_graph(mesh_fn, mask_fn, adj_fn):
     #mesh_fn='data/Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii'
     #mask_fn='data/vlpfc_nodes.1D'
     #import template mesh. has fields mesh['coords'] for xyz coordinates
@@ -61,6 +61,11 @@ def main(mesh_fn, mask_fn, adj_fn):
     scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
     np.save(adj_fn, adj)
     return adj
+
+
+def main():
+    return surface_to_graph()
+
 
 if __name__ == '__main__':
     main()
