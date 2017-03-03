@@ -5,7 +5,7 @@ from scipy.sparse import csr_matrix
 
 def mesh_to_graph(faces):
     n=faces.max()+1
-    adj = np.zeros([n,n])
+    adj = np.zeros([n,n], dtype=bool)
     for v0, v1, v2 in faces:
         #adj[v0][v0]=adj[v1][v1]=adj[v2][v2]=1
         adj[v0][v1]=adj[v1][v0]=1
@@ -14,7 +14,7 @@ def mesh_to_graph(faces):
 
     return(adj) 
 
-def mask_faces(faces):
+def mask_faces(mask, faces):
 
     masked_faces=[]
     for i in range(len(faces)):
@@ -35,31 +35,36 @@ def reindex_faces(masked_faces):
     masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
     return masked_faces_ridx
 
-#import template mesh. has fields mesh['coords'] for xyz coordinates
-# and mesh['faces'] for face indices
-mesh = io.load_mesh_geometry('data/Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii')
-faces = mesh['faces']
 
-#load in mask of vertices being considered (BA44 and 45)
-mask = np.loadtxt('data/vlpfc_nodes.1D', dtype=int)
-mask = mask - 1
+def main(mesh_fn, mask_fn, adj_fn):
+    #mesh_fn='data/Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii'
+    #mask_fn='data/vlpfc_nodes.1D'
+    #import template mesh. has fields mesh['coords'] for xyz coordinates
+    # and mesh['faces'] for face indices
+    mesh = io.load_mesh_geometry(mesh_fn)
+    faces = mesh['faces']
 
-#Mask the faces
-masked_faces=mask_faces(faces)
+    #load in mask of vertices being considered (BA44 and 45)
+    mask = np.loadtxt(mask_fn, dtype=int)
+    mask = mask - 1
 
-#Create indices for masked vertices
-reindex = reindexing(masked_faces)
-masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
-#restrict mesh using the mask
-adj = mesh_to_graph(masked_faces_ridx)
+    #Mask the faces
+    masked_faces=mask_faces(mask, faces)
 
-#convert to sparse matrix
-sparse_adj = csr_matrix(adj)
+    #Create indices for masked vertices
+    reindex = reindexing(masked_faces)
+    masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
+    #restrict mesh using the mask
+    adj = mesh_to_graph(masked_faces_ridx)
 
-scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
+    #convert to sparse matrix
+    #sparse_adj = csr_matrix(adj)
+    scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
+    np.save(adj_fn, adj)
+    return adj
 
-np.save('data/sparse_adjacency_matrix', sparse_adj)
-
+if __name__ == '__main__':
+    main()
 
 
 
