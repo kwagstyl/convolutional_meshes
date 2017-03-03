@@ -37,11 +37,11 @@ def reindex_faces(masked_faces):
 
 #import template mesh. has fields mesh['coords'] for xyz coordinates
 # and mesh['faces'] for face indices
-mesh = io.load_mesh_geometry('Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii')
+mesh = io.load_mesh_geometry('data/Structure/average/S900.L.pial_MSMAll.32k_fs_LR.surf.gii')
 faces = mesh['faces']
 
 #load in mask of vertices being considered (BA44 and 45)
-mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)
+mask = np.loadtxt('data/vlpfc_nodes.1D', dtype=int)
 mask = mask - 1
 
 #Mask the faces
@@ -56,9 +56,9 @@ adj = mesh_to_graph(masked_faces_ridx)
 #convert to sparse matrix
 sparse_adj = csr_matrix(adj)
 
-scipy.misc.imsave('adjacency_matrix.png', adj, format='png')
+scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
 
-np.save('sparse_adjacency_matrix', sparse_adj)
+np.save('data/sparse_adjacency_matrix', sparse_adj)
 
 
 
