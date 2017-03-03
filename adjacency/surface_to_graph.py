@@ -8,11 +8,11 @@ def mesh_to_graph(faces):
     adj = np.zeros([n,n], dtype=bool)
     for v0, v1, v2 in faces:
         #adj[v0][v0]=adj[v1][v1]=adj[v2][v2]=1
-        adj[v0][v1]=adj[v1][v0]=1
-        adj[v0][v2]=adj[v2][v0]=1
-        adj[v1][v2]=adj[v2][v1]=1
+        adj[v0][v1] = adj[v1][v0] = 1
+        adj[v0][v2] = adj[v2][v0] = 1
+        adj[v1][v2] = adj[v2][v1] = 1
 
-    return(adj) 
+    return adj
 
 def mask_faces(mask, faces):
 
@@ -32,7 +32,7 @@ def reindexing(masked_faces):
 def reindex_faces(masked_faces):
     all_masked_vertices = np.unique( np.array(masked_faces).flatten() )
     reindex = dict([ (all_masked_vertices[i], i) for i in range(len(all_masked_vertices)) ])
-    masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
+    masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)
     return masked_faces_ridx
 
 
@@ -50,7 +50,6 @@ def main(mesh_fn, mask_fn, adj_fn):
 
     #Mask the faces
     masked_faces=mask_faces(mask, faces)
-
     #Create indices for masked vertices
     reindex = reindexing(masked_faces)
     masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
@@ -65,6 +64,4 @@ def main(mesh_fn, mask_fn, adj_fn):
 
 if __name__ == '__main__':
     main()
-
-
 
