@@ -10,7 +10,6 @@ mask = np.loadtxt('vlpfc_nodes.1D', dtype=int)-1
 IDs = np.loadtxt('Labels/subject_ids.txt',dtype=str)
 
 #load subject overlays
-
 files = ['curvature.32k_fs_LR.shape.gii', 'thickness.32k_fs_LR.shape.gii', 
        'sulc.32k_fs_LR.shape.gii', 'MyelinMap.32k_fs_LR.func.gii',
        'MyelinMap_BC.32k_fs_LR.func.gii', 'corrThickness.32k_fs_LR.shape.gii']

@@ -4,21 +4,19 @@ import scipy.misc
 from scipy.sparse import csr_matrix
 
 def mesh_to_graph(faces):
-    n=faces.max()+1
-    adj = np.zeros([n,n])
+    n = faces.max()+1
+    adj = np.zeros([n, n])
     for v0, v1, v2 in faces:
         #adj[v0][v0]=adj[v1][v1]=adj[v2][v2]=1
-        adj[v0][v1]=adj[v1][v0]=1
-        adj[v0][v2]=adj[v2][v0]=1
-        adj[v1][v2]=adj[v2][v1]=1
+        adj[v0][v1] = adj[v1][v0] = 1
+        adj[v0][v2] = adj[v2][v0] = 1
+        adj[v1][v2] = adj[v2][v1] = 1
 
-    return(adj) 
+    return adj
 
 def mask_faces(faces):
-
-    masked_faces=[]
-    for i in range(len(faces)):
-        f=faces[i]
+    masked_faces = []
+    for f in faces:
         if f[0] in mask and f[1] in mask and f[2] in mask:
             masked_faces.append(f)
     return masked_faces
@@ -32,7 +30,7 @@ def reindexing(masked_faces):
 def reindex_faces(masked_faces):
     all_masked_vertices = np.unique( np.array(masked_faces).flatten() )
     reindex = dict([ (all_masked_vertices[i], i) for i in range(len(all_masked_vertices)) ])
-    masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
+    masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)
     return masked_faces_ridx
 
 #import template mesh. has fields mesh['coords'] for xyz coordinates
@@ -45,11 +43,11 @@ mask = np.loadtxt('data/vlpfc_nodes.1D', dtype=int)
 mask = mask - 1
 
 #Mask the faces
-masked_faces=mask_faces(faces)
+masked_faces = mask_faces(faces)
 
 #Create indices for masked vertices
 reindex = reindexing(masked_faces)
-masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)  
+masked_faces_ridx = np.array( [ map(lambda x : reindex[x], f) for f in masked_faces ], dtype=int)
 #restrict mesh using the mask
 adj = mesh_to_graph(masked_faces_ridx)
 
@@ -59,7 +57,3 @@ sparse_adj = csr_matrix(adj)
 scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
 
 np.save('data/sparse_adjacency_matrix', sparse_adj)
-
-
-
-
