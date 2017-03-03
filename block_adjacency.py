@@ -14,8 +14,8 @@ for sub in IDs:
     print (s+1)*length
     block_adj[s*length:(s+1)*length,s*length:(s+1)*length]=adj
 
-sparse_mat = sparse.coo_matrix(block_adj)
-plt.plot(sparse_mat.col, sparse_mat.row, 's')
+sparse_mat = sparse.coo_matrix(block_adj, dtype=int)
+#plt.plot(sparse_mat.col, sparse_mat.row, 's')
 
 sparse_csr = sparse.csr_matrix(sparse_mat)
 
