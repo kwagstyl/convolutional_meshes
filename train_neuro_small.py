@@ -23,9 +23,9 @@ flags.DEFINE_string('model', 'gcn', 'Model string.')  # 'gcn', 'gcn_cheby', 'den
 flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
 flags.DEFINE_integer('epochs', 200, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden1', 160, 'Number of units in hidden layer 1.')
-flags.DEFINE_integer('hidden2', 16, 'Number of units in hidden layer 2.')
-flags.DEFINE_float('dropout', 0.2, 'Dropout rate (1 - keep probability).')
-flags.DEFINE_float('weight_decay', 5e-3, 'Weight for L2 loss on embedding matrix.')
+#flags.DEFINE_integer('hidden2', 16, 'Number of units in hidden layer 2.')
+flags.DEFINE_float('dropout', 0.5, 'Dropout rate (1 - keep probability).')
+flags.DEFINE_float('weight_decay', 5e-4, 'Weight for L2 loss on embedding matrix.')
 flags.DEFINE_integer('early_stopping', 100, 'Tolerance for early stopping (# of epochs).')
 flags.DEFINE_integer('max_degree', 3, 'Maximum Chebyshev polynomial degree.')
 
@@ -49,15 +49,21 @@ else:
     adj = blocked_adjacency(total_subjects, aggr_adj_fn=adj_fn)
 
 
-label = np.loadtxt('./data/Label_data_in_mask.txt', dtype=int).flatten()
+label44 = np.loadtxt('./data/Label44_data_in_mask.txt', dtype=int).flatten()
+label45 = np.loadtxt('./data/Label45_data_in_mask.txt', dtype=int).flatten()
+LEN=len(label44)
+
 features_mat = np.load('./data/feature_matrix.npy')
-features = np.reshape(features_mat,[len(label),np.shape(features_mat)[2]])
+features = np.reshape(features_mat,[LEN,np.shape(features_mat)[2]])
+features=np.transpose(np.array([label44,label45])).astype(float)
 features = features[:total_subjects*length,:]
 features = sparse.csr_matrix(features)
 
-
-classes = np.transpose(np.array([label[:],1+label[:]*-1]))
-classes = classes[:total_subjects*length,:]
+classes = np.zeros([LEN, 3])
+classes[:,0] = label44[:]
+classes[:,1] = label45[:]
+classes[:,2] = np.ones(LEN) - label44 - label45
+classes = classes[:total_subjects*length,:].astype(int)
 y_train = classes.copy()
 y_train[train*1195:,:]=0
 y_val = classes.copy()
