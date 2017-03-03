@@ -4,8 +4,9 @@ from __future__ import print_function
 import time
 import tensorflow as tf
 import numpy as np
+import os
 from scipy import sparse,io
-
+from adjacency.block_adjacency import blocked_adjacency
 from gcn.utils import *
 from gcn.models import GCN, MLP
 
@@ -35,17 +36,19 @@ flags.DEFINE_integer('max_degree', 3, 'Maximum Chebyshev polynomial degree.')
 #
 label = np.loadtxt('data/vlpfc_nodes.1D')
 length = len(label)
-adj = np.load('data/adjacency_matrix.npy').astype(bool)
+#adj = np.load('data/adjacency_matrix.npy').astype(bool)
 train = 5
 val = 5
 test = 1
-total_subjects = train + val + test
-block_adj = np.zeros([total_subjects*length,total_subjects*length],dtype=bool)
-for s in range(4):
-  block_adj[s*length:(s+1)*length,s*length:(s+1)*length]=adj
+total_subjects=train + val + test
 
-sparse_csr = sparse.csr_matrix(block_adj, dtype=int)
-adj= sparse_csr
+adj_fn='./data/'+str(total_subjects)+'_subjects_adjacency.mtx'
+if os.path.exists(adj_fn):
+    adj = io.mmread(adj_fn)
+else:
+    adj = blocked_adjacency(total_subjects, aggr_adj_fn=adj_fn)
+
+
 label = np.loadtxt('./data/Label_data_in_mask.txt', dtype=int).flatten()
 features_mat = np.load('./data/feature_matrix.npy')
 features = np.reshape(features_mat,[len(label),np.shape(features_mat)[2]])
