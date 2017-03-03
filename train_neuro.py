@@ -1,9 +1,10 @@
 from __future__ import division
 from __future__ import print_function
-
+from adjacency.block_adjacency import blocked_adjacency
 import time
 import tensorflow as tf
 import numpy as np
+import os
 from scipy import sparse,io
 
 from gcn.utils import *
@@ -30,7 +31,17 @@ flags.DEFINE_integer('max_degree', 3, 'Maximum Chebyshev polynomial degree.')
 # Load data,
 #adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data(FLAGS.dataset)
 #our loading, reorganise into diagonal
-adj = io.mmread('./data/all_subjects_adjacency.mtx')
+nSubjects=10
+train = 4
+val = 5
+test = 1
+
+adj_fn='./data/all/'+str(nSubjects)+'_subjects_adjacency.mtx'
+if os.path.exists(adj_fn):
+    adj = io.mmread(adj_fn)
+else:
+    adj = blocked_adjacency(nSubjects)
+
 #
 label = np.loadtxt('./data/Label_data_in_mask.txt', dtype=int).flatten()
 features_mat = np.load('./data/feature_matrix.npy')
@@ -39,9 +50,7 @@ features = sparse.csr_matrix(features)
 
 
 classes = np.array([label[:],1+label[:]*-1])
-train = 40
-val = 60
-test = 1
+
 y_train = classes.copy()
 y_train[:,train*1195:]=0
 y_val = classes.copy()
