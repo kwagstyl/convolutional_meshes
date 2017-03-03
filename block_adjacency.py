@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import sparse
+from scipy import io
 
 IDs = np.loadtxt('../convolutional_meshes_data/Labels/subject_ids.txt',dtype=str)
 label = np.loadtxt('data/vlpfc_nodes.1D')
@@ -19,5 +20,6 @@ sparse_mat = sparse.coo_matrix(block_adj, dtype=int)
 
 sparse_csr = sparse.csr_matrix(sparse_mat)
 
-np.save('data/all_subjects_adjacency.npy',sparse_csr)
+io.mmwrite('data/all_subjects_adjacency.mtx', sparse_csr) 
+#np.save('data/all_subjects_adjacency.npy',sparse_csr)
 

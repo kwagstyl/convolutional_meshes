@@ -4,7 +4,7 @@ from __future__ import print_function
 import time
 import tensorflow as tf
 import numpy as np
-from scipy import sparse
+from scipy import sparse,io
 
 from gcn.utils import *
 from gcn.models import GCN, MLP
@@ -30,11 +30,12 @@ flags.DEFINE_integer('max_degree', 3, 'Maximum Chebyshev polynomial degree.')
 # Load data,
 #adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_data(FLAGS.dataset)
 #our loading, reorganise into diagonal
-adj = np.load('/Users/konradwagstyl/Desktop/HCP_brainhack/convolutional_meshes/data/all_subjects_adjacency.npy')
-features = np.load('/Users/konradwagstyl/Desktop/HCP_brainhack/convolutional_meshes/data/feature_matrix.npy')
-features = 
+adj = io.mmread('./data/all_subjects_adjacency.mtx')
 #
-label = np.loadtxt('/Users/konradwagstyl/Desktop/HCP_brainhack/convolutional_meshes/data/Label_data_in_mask.txt', dtype=int).flatten()
+label = np.loadtxt('./data/Label_data_in_mask.txt', dtype=int).flatten()
+features_mat = np.load('./data/feature_matrix.npy')
+features = np.reshape(features_mat, 
+
 classes = np.array([label[:],1+label[:]*-1])
 train = 40
 val = 60
