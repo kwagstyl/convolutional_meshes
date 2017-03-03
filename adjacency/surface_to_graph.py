@@ -58,7 +58,7 @@ def surface_to_graph(mesh_fn, mask_fn, adj_fn):
 
     #convert to sparse matrix
     #sparse_adj = csr_matrix(adj)
-    scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
+#    scipy.misc.imsave('data/adjacency_matrix.png', adj, format='png')
     np.save(adj_fn, adj)
     return adj
 
